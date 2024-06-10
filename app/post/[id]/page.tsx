@@ -1,35 +1,40 @@
 "use client";
-import React, { FC, useEffect, useState } from "react";
+
 import { useParams } from "next/navigation";
-import axios from "axios";
-import { Post } from "../../components/Card";
-import { useTheme } from "@/app/context/theme";
+import { useEffect, useState } from "react";
+import axiosInstance from "@/app/lib/axios";
+import { Post } from "@/app/components/Card";
 
-const PostPage: FC = () => {
-  const { id } = useParams();
+const PostDetail = () => {
+  const params = useParams();
+  const id = params?.id;
   const [post, setPost] = useState<Post | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const { theme } = useTheme();
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  useEffect(() => {
+    if (id) {
+      axiosInstance
+        .get(`auth/posts/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        })
+        .then((response) => {
+          setPost(response.data);
+        });
+    }
+  }, [id]);
+
+  if (!post) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div
-      className={`p-10 ${
-        theme === "light" ? "bg-white text-black" : "bg-gray-900 text-white"
-      }`}
-    >
-      <h1 className="text-3xl font-bold mb-4">{post?.title}</h1>
-      <p className="text-sm text-gray-500 mb-4">{post?.body}</p>
-      <div>
-        <p>Likes: {post?.reactions.likes}</p>
-        <p>Dislikes: {post?.reactions.dislikes}</p>
-        <p>Views: {post?.views}</p>
-      </div>
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
+      <p className="text-gray-700 mb-4">{post.body}</p>
+      <p className="text-sm text-gray-500">Author ID: {post.userId}</p>
     </div>
   );
 };
 
-export default PostPage;
+export default PostDetail;

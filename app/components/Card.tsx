@@ -78,7 +78,7 @@ const Card: FC = () => {
           className={`flex gap-3 flex-col border-t ${
             theme === "light" ? "border-gray-300" : "border-gray-700"
           } py-10`}
-          onClick={() => router.push(`/posts/${post.id}`)}
+          onClick={() => router.push(`post/${post.id}`)}
         >
           <div className="flex justify-between text-xs mb-1 items-center">
             <p>Author&apos;s name in Topics Name</p>
