@@ -81,7 +81,7 @@ const Card: FC = () => {
           onClick={() => router.push(`/posts/${post.id}`)}
         >
           <div className="flex justify-between text-xs mb-1 items-center">
-            <p>Author's name in Topics Name</p>
+            <p>Author&apos;s name in Topics Name</p>
             <p className="px-2 rounded-xl bg-lime-500 text-white">
               {post.tags.join(" ")}
             </p>
